@@ -1,0 +1,1 @@
+This file will document the process of integrating AWS services (like Cognito and S3) with your Angular project, including code setup, library configuration, and how to interact with AWS services from the frontend.
