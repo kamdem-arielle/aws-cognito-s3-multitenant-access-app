@@ -1,2 +1,38 @@
-# aws-cognito-s3-multitenant-access-app
-This repository showcases a secure backup solution leveraging AWS Cognito, IAM roles, and S3 for file storage. The application enables two distinct clients (Client A and Client B) to manage and store their backup data in separate folders within an S3 bucket.
+# AWS Cognito S3 Multitenant Access App
+
+This project demonstrates how to implement secure multi-tenant access to an Amazon S3 bucket using AWS Cognito, IAM Roles, and Prefix-based S3 access. Each tenant (Client A, Client B) has isolated access to their data based on their identity and group membership in Cognito.
+
+## 🌐 Live Demo
+- (Optional) Deployed frontend link or sample usage instructions.
+
+---
+
+## 🚀 Features
+- 🔐 Cognito User Pool with groups (Client A and B)
+- 🆔 Identity Pool with role-based access
+- 🎯 IAM policies restricting access to S3 prefixes
+- 🪣 S3 bucket structured with prefixes for data isolation
+- 💻 Angular frontend (optional) with OIDC login via Cognito
+- 🧱 Infrastructure as code using AWS CDK
+
+## 🔧 Tech Stack
+- **AWS S3** – Secure object storage
+- **AWS Cognito** – User authentication and identity federation
+- **IAM** – Role-based access management
+- **AWS CDK** – Infrastructure as code
+- **Angular** *(optional)* – Frontend integration
+- **GitHub Actions / Bitbucket Pipelines** – Deployment automation
+
+---
+
+## 📖 Documentation
+Detailed explanations and architecture available in the docs folder.
+
+---
+
+## 📌 Setup Instructions
+
+1. Clone this repo:
+   ```bash
+   git clone https://github.com/yourusername/aws-cognito-s3-multitenant-access-app.git
+   cd aws-cognito-s3-multitenant-access-app
