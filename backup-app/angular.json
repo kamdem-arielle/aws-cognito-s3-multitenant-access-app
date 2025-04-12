@@ -23,6 +23,7 @@
             "polyfills": [
               "zone.js"
             ],
+            "allowedCommonJsDependencies": ["amazon-cognito-identity-js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -37,9 +38,10 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+               "src/styles/app.scss"
             ],
-            "scripts": []
+            "scripts": [ "src/polyfills.ts"]
           },
           "configurations": {
             "production": {

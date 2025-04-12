@@ -1,0 +1,58 @@
+/*VARIABLES */
+/* COLORS */ 
+
+$c_white: #ffffff;
+$c_black: #3D3D3D;
+
+$c_primary: #004A87;
+$c_primary_light: #4AC0E4;
+
+$c_green_light: #44d406;
+
+$c_red: #d40606;
+$c_red_dark: #910505;
+$c_warning : #F7C752;
+
+.ic {
+    display: block;
+    transition: 0.3s;
+    -webkit-mask: no-repeat center center;
+    mask: no-repeat center center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+  
+
+
+.ic_eye_close {
+    min-width: 28px;
+    height: 28px;
+    -webkit-mask-image: url('/assets/icons/ic_eye_close.svg');
+    mask-image: url('/assets/icons/ic_eye_close.svg');
+    background-color: $c_primary;
+  }
+  
+  .ic_eye_open {
+    min-width: 28px;
+    height: 28px;
+    -webkit-mask-image: url('/assets/icons/ic_eye_open.svg');
+    mask-image: url('/assets/icons/ic_eye_open.svg');
+    background-color: $c_primary;
+  }
+
+  .ic_dropdown_arrow {
+    min-width: 20px;
+    height: 20px;
+    -webkit-mask-image: url('/assets/icons/ic_dropdown_arrow.svg');
+    mask-image: url('/assets/icons/ic_dropdown_arrow.svg');
+    background-color: $c_primary;
+  }
+
+  .ic_next {
+    min-width: 20px;
+    height: 20px;
+    -webkit-mask-image: url('/assets/icons/ic_next.svg');
+    mask-image: url('/assets/icons/ic_next.svg');
+    background-color: $c_white;
+  }
+  
