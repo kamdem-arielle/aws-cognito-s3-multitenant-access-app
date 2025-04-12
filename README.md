@@ -12,7 +12,7 @@ This project demonstrates how to implement secure multi-tenant access to an Amaz
 - 🆔 Identity Pool with role-based access
 - 🎯 IAM policies restricting access to S3 prefixes
 - 🪣 S3 bucket structured with prefixes for data isolation
-- 💻 Angular frontend (optional) with OIDC login via Cognito
+- 💻 Angular frontend with OIDC login via Cognito
 - 🧱 Infrastructure as code using AWS CDK
 
 ## 🔧 Tech Stack
@@ -26,7 +26,7 @@ This project demonstrates how to implement secure multi-tenant access to an Amaz
 ---
 
 ## 📖 Documentation
-Detailed explanations and architecture available in the docs folder.
+Detailed explanations and architecture available in the documentation folder.
 
 ---
 
@@ -34,5 +34,8 @@ Detailed explanations and architecture available in the docs folder.
 
 1. Clone this repo:
    ```bash
-   git clone https://github.com/yourusername/aws-cognito-s3-multitenant-access-app.git
+   git clone https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app.git
    cd aws-cognito-s3-multitenant-access-app
+
+Don't forget to star⭐️ the repository if you find this helpful.
+Check my profile and contact me if you need help on this.
