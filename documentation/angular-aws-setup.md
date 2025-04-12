@@ -37,7 +37,7 @@ At this stage, since I hadn’t created the Identity Pool yet (which requires ro
 ![IAM Role Web Identity](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/b0f27c47c7f9edb07c682f9d9de21eb906c6d7d2/images/image.png)
 
 📸 **Screenshot: IAM Roles for clientA and clientB**  
-![IAM Roles](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/b0f27c47c7f9edb07c682f9d9de21eb906c6d7d2/images/image%20(10).png)
+![IAM Roles](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/5bb21ba591534d24a9c6484dfcfa4503ee1d87a5/images/image%20(10).png)
 
 ---
 
