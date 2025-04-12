@@ -14,10 +14,10 @@ The first step was to create an **S3 bucket** to store backup files per client. 
 These prefixes help isolate each client's data within the same bucket.
 
 📸 **Screenshot: S3 Bucket Overview**  
-![S3 Bucket](./images/s3-bucket.png)
+![S3 Bucket](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/b0f27c47c7f9edb07c682f9d9de21eb906c6d7d2/images/image%20(1).png)
 
 📸 **Screenshot: Prefixes for clientA and clientB**  
-![S3 Prefixes](./images/s3-prefixes.png)
+![S3 Prefixes](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/b0f27c47c7f9edb07c682f9d9de21eb906c6d7d2/images/image%20(1).png)
 
 ---
 
@@ -34,10 +34,10 @@ To allow federated identities (from Cognito) to assume roles and access their re
 At this stage, since I hadn’t created the Identity Pool yet (which requires roles to be pre-defined for group-based access), I temporarily used a **dummy Identity Pool ID** in the trust relationship when creating the IAM roles.
 
 📸 **Screenshot: Role with Web Identity and Dummy Identity Pool ID**  
-![IAM Role Web Identity](./images/iam-role-web-identity.png)
+![IAM Role Web Identity](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/b0f27c47c7f9edb07c682f9d9de21eb906c6d7d2/images/image.png)
 
 📸 **Screenshot: IAM Roles for clientA and clientB**  
-![IAM Roles](./images/iam-roles.png)
+![IAM Roles](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/b0f27c47c7f9edb07c682f9d9de21eb906c6d7d2/images/image%20(1).jpeg)
 
 ---
 
@@ -62,10 +62,10 @@ Each group was assigned a specific IAM role:
 - Group `clientB` → IAM Role `clientB-role`
 
 📸 **Screenshot: Identity Pool Trust Configuration (with Cognito User Pool as Identity Source)**  
-![Identity Pool Trust](./images/identity-pool-trust.png)
+![Identity Pool Trust](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/b0f27c47c7f9edb07c682f9d9de21eb906c6d7d2/images/image%20(4).png)
 
 📸 **Screenshot: Role Mapping Rule Settings**  
-![Role Mapping](./images/role-mapping-rules.png)
+![Role Mapping](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/b0f27c47c7f9edb07c682f9d9de21eb906c6d7d2/images/image%20(5).png)
 
 ---
 
@@ -74,7 +74,7 @@ Each group was assigned a specific IAM role:
 After creating the Identity Pool, I updated the **trust relationship** of each IAM role to reference the **actual Identity Pool ID**, replacing the dummy one used during initial setup.
 
 📸 **Screenshot: Updated Trusted Entity with Final Identity Pool ID**  
-![Update Trusted Entity](./images/updated-trusted-entity.png)
+![Update Trusted Entity](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/b0f27c47c7f9edb07c682f9d9de21eb906c6d7d2/images/image%20(8).png)
 
 ---
 
