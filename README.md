@@ -37,5 +37,7 @@ Detailed explanations and architecture available in the documentation folder.
    git clone https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app.git
    cd aws-cognito-s3-multitenant-access-app
 
+---
+
 Don't forget to star⭐️ the repository if you find this helpful.
 Check my profile and contact me if you need help on this.
