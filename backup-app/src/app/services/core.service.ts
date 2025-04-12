@@ -20,7 +20,7 @@ export class CoreService {
   constructor() { }
 
     // test if a string value is null, undefined or empty
-    isEmptyOrNull(value: string) {
+    isEmptyOrNull(value: string | null | undefined) {
       if (
         value == "" ||
         value == null ||
@@ -88,6 +88,7 @@ export class CoreService {
     }
   }
 
+  
   removeFromLocalStorage(key: any) {
     let encryptedKey = this.encryptData(key, this.encryptDecryptKeyPassword);
     localStorage.removeItem(encryptedKey);
