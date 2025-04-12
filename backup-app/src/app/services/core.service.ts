@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as CryptoJS from 'crypto-js';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class CoreService {
     }
 
     
-  constructor() { }
+  constructor(private auth:AuthService) { }
 
     // test if a string value is null, undefined or empty
     isEmptyOrNull(value: string | null | undefined) {
@@ -88,9 +89,18 @@ export class CoreService {
     }
   }
 
-  
+
   removeFromLocalStorage(key: any) {
     let encryptedKey = this.encryptData(key, this.encryptDecryptKeyPassword);
     localStorage.removeItem(encryptedKey);
+  }
+
+  async isUserAuthenticated(){
+    const isLoggedIn = await this.auth.initSession();
+    if (isLoggedIn) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

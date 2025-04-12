@@ -2,11 +2,12 @@ import { CanActivateFn, Router } from '@angular/router';
 import { CoreService } from './core.service';
 import { inject } from '@angular/core';
 
-export const AuthGuard: CanActivateFn = (route, state) => {
+export const AuthGuard: CanActivateFn = async (route, state) => {
   let core = inject(CoreService);
   let router = inject(Router);
-
-  if (core.decryptFromLocalStorage("currentUser")) {
+  const isAuthenticated = await core.isUserAuthenticated();
+ 
+  if (isAuthenticated) {
     // logged in so return true
     return true;
   }
