@@ -17,7 +17,7 @@ These prefixes help isolate each client's data within the same bucket.
 ![S3 Bucket](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/b0f27c47c7f9edb07c682f9d9de21eb906c6d7d2/images/image%20(1).png)
 
 📸 **Screenshot: Prefixes for clientA and clientB**  
-![S3 Prefixes](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/b0f27c47c7f9edb07c682f9d9de21eb906c6d7d2/images/image%20(1).png)
+![S3 Prefixes](https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app/blob/b0f27c47c7f9edb07c682f9d9de21eb906c6d7d2/images/image%20(9).png)
 
 ---
 
