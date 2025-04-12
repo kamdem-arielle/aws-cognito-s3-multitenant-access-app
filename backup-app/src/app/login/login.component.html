@@ -1,1 +1,75 @@
-<p>login works!</p>
+<!-- <app-login-alert></app-login-alert> -->
+
+<div class="login_page">
+  <div class="login_page-lang lang_toggle" ngbDropdown>
+    <a href="javascript:void(0)" class="lang_toggle-main" ngbDropdownToggle>
+      <i class="ic ic_lang"></i> 
+      {{ "Language"  }}
+      <i class="ic ic_dropdown_arrow"></i> 
+    </a>
+    <div ngbDropdownMenu class="lang_toggle-dropdown">
+      <a
+        ngbDropdownToggle
+        href="javascript:void(0)"
+        (click)="changeLang('en')"
+        class="lang-en"
+      >
+        {{ "English" }}
+      </a>
+      <a
+        ngbDropdownToggle
+        href="javascript:void(0)"
+        (click)="changeLang('fr')"
+        class="lang-fr"
+      >
+        {{ "French"  }}
+      </a>
+    </div>
+  </div>
+
+  <div class="login_page-wrap">
+    <div class="login_page-logo">
+      <img src="assets/images/logo.png" />
+    </div>
+    <form role="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login_page-form">
+      <label class="login_page-label">
+        <div class="login_page-placeholder">{{'Username' }}</div>
+        <div class="login_page-input">
+          <input type="text" ng-model="name" formControlName="username" placeholder="{{'Email example' }}" autocomplete="username" />
+        </div>
+      </label>
+      <label class="login_page-label">
+        <div class="login_page-placeholder">{{ 'Password' }}</div>
+        <div class="login_page-input">
+          <input 
+          [type]="passwordInputTextHidden ? 'password' : 'text'"
+          formControlName="password" placeholder="{{ 'Password' }}" autocomplete="password" />
+          <i class="ic pass_show" (click)="togglePasswordVisibility()" [ngClass]="passwordInputTextHidden ? 'ic_eye_close' : 'ic_eye_open'"></i>
+        </div>
+      </label>
+
+      <!-- <div class="login_page-recover" [routerLink]="['/login/resetpassword']">{{"Recover password"}}</div> -->
+
+      <div class="login_page-submit">
+        <button [class.disabled]="loading" class="btn-new">
+          {{"Login" }}
+          @if(loading){
+            <i class="btn-loader">
+                <span></span>
+                <span></span>
+                <span></span>
+              </i>
+          }@else{
+            <i class="ic ic_next"></i>
+          }
+         
+        </button>
+      </div>
+    </form>
+    <!-- <div class="login_page-copyright">
+      Copyright ©<b>{{ date | date: "yyyy" }}
+        <a href="https://pethersolutions.com/" target="_blank">Pether</a>
+      </b>
+    </div> -->
+  </div>
+</div>
