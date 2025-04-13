@@ -12,7 +12,7 @@ This project is built using Angular 18 and integrates with AWS services like Ama
  ```
    - You can find the Angular project inside the `backup-app` folder.
 
-2. **Libraries Used**
+2. **Main libraries Used**
    - `crypto-js`: For data encryption and decryption in local storage.
    - `aws-sdk`: To interact with AWS services (Cognito, S3).
    - `amazon-cognito-identity-js`: To authenticate users via Cognito and manage AWS credentials.
