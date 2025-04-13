@@ -3,92 +3,98 @@ import { Injectable } from '@angular/core';
 import {
   CognitoUserPool,
   AuthenticationDetails,
-  CognitoUser
+  CognitoUser,
+  CognitoUserSession
 } from 'amazon-cognito-identity-js';
+
 import { environment } from '../../environments/environment';
 import * as AWS from 'aws-sdk';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
 
+export class AuthService {
   private userPool = new CognitoUserPool({
     UserPoolId: environment.userPoolId,
     ClientId: environment.userPoolWebClientId
   });
-  
 
+  private clientPrefix = ''; // Prefix for S3 objects
   private credentials: AWS.CognitoIdentityCredentials | null = null;
 
-  constructor() { }
+  constructor() {}
 
-  authenticate(username: string , password: string): Promise<AWS.Credentials> {
-    console.log('this.userPool',this.userPool)
+  async authenticate(username: string, password: string): Promise<AWS.Credentials> {
     const userData = { Username: username, Pool: this.userPool };
     const authDetails = new AuthenticationDetails({ Username: username, Password: password });
-    console.log('authdetails',authDetails)
     const cognitoUser = new CognitoUser(userData);
-    console.log('user',cognitoUser)
-    console.log('user',cognitoUser.getSignInUserSession())
-    console.log('user',cognitoUser)
-    if (cognitoUser) {
-      const session = cognitoUser.getSignInUserSession();
-      if (session && session.getIdToken()) {
-        console.log('user', session.getIdToken().payload["cognito:groups"]);
-      }
-    }
-  
-  
+
     return new Promise((resolve, reject) => {
       cognitoUser.authenticateUser(authDetails, {
         onSuccess: async (result) => {
-          console.log('success');
           const idToken = result.getIdToken().getJwtToken();
           localStorage.setItem('idToken', idToken);
 
           await this.configureAWSCredentials(idToken);
 
+          await this.extractClientPrefixFromSession(cognitoUser);
+
           resolve(AWS.config.credentials as AWS.Credentials);
         },
+
         newPasswordRequired: (userAttributes, requiredAttributes) => {
-          // Example: You can auto-set a new password or redirect to a "set new password" page
-          console.log('New password is required for this user');
-      
           cognitoUser.completeNewPasswordChallenge(
-            environment.challenge, // ✅ Replace with real input
+            environment.challenge, // Replace with actual input
             {},
             {
-              onSuccess: session => {
-                // You can repeat your AWS credentials logic here
+              onSuccess: async (session) => {
                 const idToken = session.getIdToken().getJwtToken();
                 localStorage.setItem('idToken', idToken);
-                AWS.config.region = environment.region;
-                AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-                  IdentityPoolId: environment.identityPoolId,
-                  Logins: {
-                    [`cognito-idp.${environment.region}.amazonaws.com/${environment.userPoolId}`]: idToken
-                  }
-                });
-      
-                (AWS.config.credentials as AWS.CognitoIdentityCredentials).getPromise().then(() => {
-                  resolve(AWS.config.credentials as AWS.Credentials);
-                });
+
+                await this.configureAWSCredentials(idToken);
+                await this.extractClientPrefixFromSession(cognitoUser);
+
+                resolve(AWS.config.credentials as AWS.Credentials);
               },
-              onFailure: err => reject(err)
+              onFailure: (err) => reject(err)
             }
           );
         },
+
         onFailure: (err) => {
-          reject(err)
-          console.log('failure');
+          console.error('Authentication failed:', err);
+          reject(err);
         }
-      
       });
     });
   }
 
-  async configureAWSCredentials(idToken: string): Promise<void> {
+  private async extractClientPrefixFromSession(cognitoUser: CognitoUser): Promise<void> {
+    return new Promise((resolve, reject) => {
+      cognitoUser.getSession((err: Error | null, session: CognitoUserSession | null) => {
+        if (err || !session) {
+          console.error('Session retrieval error:', err);
+          return reject(err);
+        }
+
+        const payload = session.getIdToken().decodePayload();
+        const groups = payload['cognito:groups'];
+
+        if (groups && groups.length > 0) {
+          this.clientPrefix = `${groups[0]}/`;
+          localStorage.setItem('clientPrefix', this.clientPrefix);
+          console.log('Client prefix:', this.clientPrefix);
+        } else {
+          console.warn('User does not belong to any Cognito group');
+        }
+
+        resolve();
+      });
+    });
+  }
+
+  private async configureAWSCredentials(idToken: string): Promise<void> {
     AWS.config.region = environment.region;
 
     this.credentials = new AWS.CognitoIdentityCredentials({
@@ -101,7 +107,6 @@ export class AuthService {
     AWS.config.credentials = this.credentials;
     await this.credentials.getPromise();
   }
-
 
   async initSession(): Promise<boolean> {
     const idToken = localStorage.getItem('idToken');
@@ -117,9 +122,9 @@ export class AuthService {
     }
   }
 
-
   logout(): void {
     localStorage.removeItem('idToken');
+    localStorage.removeItem('clientPrefix');
     AWS.config.credentials = null;
     this.credentials = null;
   }
@@ -127,11 +132,35 @@ export class AuthService {
   listObjectsInPrefix(bucket: string): Promise<AWS.S3.ObjectList> {
     const s3 = new AWS.S3();
     return new Promise((resolve, reject) => {
-      s3.listObjectsV2({ Bucket: bucket, Prefix:'ClientA/'}, (err, data) => {
+      s3.listObjectsV2({ Bucket: bucket, Prefix: this.clientPrefix }, (err, data) => {
         if (err) reject(err);
-        else resolve(data.Contents || []);
+        else {
+          const files = (data.Contents || [])
+            .filter((obj:any) => obj.Size > 0) 
+            .map(obj => ({
+              key: obj.Key!,
+              url: this.generateSignedUrl(bucket, obj.Key!),
+              LastModified : obj.LastModified,
+              Size: obj.Size ? obj.Size / 1024 : 0 // Size in KB
+
+            }));
+  
+          resolve(files);
+        }
       });
     });
   }
 
+
+  generateSignedUrl(bucket: string, key: string): string {
+    const s3 = new AWS.S3();
+    const params = {
+      Bucket: bucket,
+      Key: key,
+      Expires: 86400 // Link is valid for 24 hours (60 * 60 * 24)
+    };
+  
+    return s3.getSignedUrl('getObject', params);
+  }
 }
+
