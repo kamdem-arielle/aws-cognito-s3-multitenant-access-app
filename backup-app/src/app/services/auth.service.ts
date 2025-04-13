@@ -9,6 +9,7 @@ import {
 
 import { environment } from '../../environments/environment';
 import * as AWS from 'aws-sdk';
+import { CoreService } from './core.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class AuthService {
   private clientPrefix = ''; // Prefix for S3 objects
   private credentials: AWS.CognitoIdentityCredentials | null = null;
 
-  constructor() {}
+  constructor(private core:CoreService) {}
 
   async authenticate(username: string, password: string): Promise<AWS.Credentials> {
     const userData = { Username: username, Pool: this.userPool };
@@ -83,7 +84,8 @@ export class AuthService {
 
         if (groups && groups.length > 0) {
           this.clientPrefix = `${groups[0]}/`;
-          localStorage.setItem('clientPrefix', this.clientPrefix);
+          this.core.encryptToLocalStorage('clientPrefix', this.clientPrefix);
+          // localStorage.setItem('clientPrefix', this.clientPrefix);
           console.log('Client prefix:', this.clientPrefix);
         } else {
           console.warn('User does not belong to any Cognito group');
@@ -109,7 +111,9 @@ export class AuthService {
   }
 
   async initSession(): Promise<boolean> {
-    const idToken = localStorage.getItem('idToken');
+    // const idToken = localStorage.getItem('idToken');
+
+    const idToken = this.core.decryptFromLocalStorage('idToken', false);
     if (!idToken) return false;
 
     try {
@@ -130,6 +134,8 @@ export class AuthService {
   }
 
   listObjectsInPrefix(bucket: string): Promise<AWS.S3.ObjectList> {
+    this.clientPrefix = this.clientPrefix ?  this.clientPrefix : this.core.decryptFromLocalStorage('clientPrefix', false);
+    console.log('Client prefix:', this.clientPrefix);
     const s3 = new AWS.S3();
     return new Promise((resolve, reject) => {
       s3.listObjectsV2({ Bucket: bucket, Prefix: this.clientPrefix }, (err, data) => {
@@ -161,6 +167,15 @@ export class AuthService {
     };
   
     return s3.getSignedUrl('getObject', params);
+  }
+
+  async isUserAuthenticated(){
+    const isLoggedIn = await this.initSession();
+    if (isLoggedIn) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

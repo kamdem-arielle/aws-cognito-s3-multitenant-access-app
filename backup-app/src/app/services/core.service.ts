@@ -18,7 +18,7 @@ export class CoreService {
     }
 
     
-  constructor(private auth:AuthService) { }
+  constructor() { }
 
     // test if a string value is null, undefined or empty
     isEmptyOrNull(value: string | null | undefined) {
@@ -95,12 +95,5 @@ export class CoreService {
     localStorage.removeItem(encryptedKey);
   }
 
-  async isUserAuthenticated(){
-    const isLoggedIn = await this.auth.initSession();
-    if (isLoggedIn) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  
 }
