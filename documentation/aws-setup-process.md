@@ -158,6 +158,7 @@ Make sure the cognito-identity.amazonaws.com:aud param corresponds to your ident
     "MaxAgeSeconds": 3000
   }
 ]
+```
 
 This concludes the AWS setup required for enabling fine-grained S3 access using Cognito-authenticated Angular web clients.
 
