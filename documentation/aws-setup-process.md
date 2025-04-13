@@ -122,7 +122,7 @@ Below you will see  the trust policy attached to one of the role.
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
                 "StringEquals": {
-                    "cognito-identity.amazonaws.com:aud": "us-east-1:1ded7e88-eefe-474e-a33e-6ccaf5350bbc"
+                    "cognito-identity.amazonaws.com:aud": "us-east-1:1ded7e88-eefe-474e-a33e-ddfaf5345bbc"
                 }
             }
         }
