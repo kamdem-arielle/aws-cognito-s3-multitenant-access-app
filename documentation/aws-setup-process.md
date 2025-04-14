@@ -110,6 +110,7 @@ Each group was assigned a specific IAM role:
 After creating the Identity Pool, I updated the **trust relationship** of each IAM role to reference the **actual Identity Pool ID**, replacing the dummy one used during initial setup.
 
 Below you will see  the trust policy attached to one of the role.
+
 ```json
 {
     "Version": "2012-10-17",
@@ -160,5 +161,5 @@ Make sure the cognito-identity.amazonaws.com:aud param corresponds to your ident
 ]
 ```
 
-This concludes the AWS setup required for enabling fine-grained S3 access using Cognito-authenticated Angular web clients.
+This concludes the AWS setup required for enabling fine-grained S3 access using Cognito-authenticated Angular web clients.Will add a small section which may be great to handle scaling
 
