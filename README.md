@@ -1,4 +1,4 @@
-# AWS Cognito S3 Multitenant Access App
+ # AWS Cognito S3 Multitenant Access App
 
 This project demonstrates how to implement secure multi-tenant access to an Amazon S3 bucket using AWS Cognito, IAM Roles, and Prefix-based S3 access. Each tenant (Client A, Client B) has isolated access to their data based on their identity and group membership in Cognito.
 
@@ -44,5 +44,5 @@ For now i gave a basic setup of how to setup this app.Subsequently I might updat
 
 ---
 
-Don't forget to star⭐️ the repository if you find this helpful.
+Don't forget to star ⭐️ the repository if you find this helpful.
 Check my profile and contact me if you need help on this.
