@@ -8,6 +8,7 @@ This project is built using Angular 18 and integrates with AWS services like Ama
    
    - This project was generated using Angular 18.
    - Run the following command to create the project:
+     
  ```bash
   ng new backup-app
  ```
