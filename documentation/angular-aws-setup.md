@@ -18,6 +18,7 @@ This project is built using Angular 18 and integrates with AWS services like Ama
    - `amazon-cognito-identity-js`: To authenticate users via Cognito and manage AWS credentials.
 
 Install the required libraries using the following commands:
+
 ```bash
 npm install aws-sdk amazon-cognito-identity-js crypto-js
 ```
