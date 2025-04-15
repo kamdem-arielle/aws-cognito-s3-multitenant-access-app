@@ -5,6 +5,7 @@ This project is built using Angular 18 and integrates with AWS services like Ama
 ## Project Setup
 
 1. **Create Angular Project**
+   
    - This project was generated using Angular 18.
    - Run the following command to create the project:
  ```bash
