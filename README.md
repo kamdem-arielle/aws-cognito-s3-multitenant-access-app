@@ -33,9 +33,11 @@ Detailed explanations and architecture available in the documentation folder.
 ## 📌 Setup Instructions
 
 1. Clone this repo:
-   ```bash
+
+    ```bash
    git clone https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app.git
    cd aws-cognito-s3-multitenant-access-app
+   
    ```
 
 ---
