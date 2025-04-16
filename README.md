@@ -12,7 +12,7 @@ This project demonstrates how to implement secure multi-tenant access to an Amaz
 - 🆔 Identity Pool with role-based access
 - 🎯 IAM policies restricting access to S3 prefixes
 - 🪣 S3 bucket structured with prefixes for data isolation
-- 💻 Angular frontend integration Cognito
+- 💻 Angular frontend with cognito
 - 🧱 Infrastructure as code using AWS CDK
 
 ## 🔧 Tech Stack
