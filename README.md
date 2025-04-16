@@ -36,6 +36,7 @@ Detailed explanations and architecture available in the documentation folder.
    ```bash
    git clone https://github.com/kamdem-arielle/aws-cognito-s3-multitenant-access-app.git
    cd aws-cognito-s3-multitenant-access-app
+   ```
 
 ---
 ## 📌 Next steps
