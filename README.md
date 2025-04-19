@@ -8,8 +8,8 @@ This project demonstrates how to implement secure multi-tenant access to an Amaz
 ---
 
 ## 🚀 Features
-- 🔐 Cognito User Pool with groups (Client A and B)
-- 🆔 Identity Pool with role-based access
+- 🔐 Cognito User Pool with groups (Client A and B).
+- 🆔 Identity Pool with role-based access.
 - 🎯 IAM policies restricting access to S3 prefixes
 - 🪣 S3 bucket structured with prefixes for data isolation
 - 💻 Angular frontend with cognito integration
