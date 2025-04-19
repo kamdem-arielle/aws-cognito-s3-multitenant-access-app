@@ -20,8 +20,8 @@ This project demonstrates how to implement secure multi-tenant access to an Amaz
 - **AWS Cognito** – User authentication and identity federation
 - **IAM** – Role-based access management
 - **AWS CDK** – Infrastructure as code
-- **Angular** – Frontend integration
-- **GitHub Actions / Bitbucket Pipelines** – Deployment automation
+- **Angular** – Frontend integration.
+- **GitHub Actions / Bitbucket Pipelines** – Deployment automation.
 
 ---
 
