@@ -161,5 +161,19 @@ Make sure the cognito-identity.amazonaws.com:aud param corresponds to your ident
 ]
 ```
 
+
+## Common errors you may encounter
+
+- 400 BAD REQUEST error when trying to authentticate;Try verifying you authentication flow to make sure you have added your authenticatio flow.The one I used in this project is username and password.
+- 400 BAD REQUEST error for password challenge request;make sure you are passing the right number of params to the completeNewPasswordChallenge cognito method:
+  - For this case the user can sign in with the username only but if for instance you have added the email you need to pass the object as such:
+
+  ```
+  cognitoUser.completeNewPasswordChallenge( new password,{ name: <username> ,email : <email>})
+
+  ```
+
+---
+
 This concludes the AWS setup required for enabling fine-grained S3 access using Cognito-authenticated Angular web clients.Will add a small section which may be great to handle scaling
 
