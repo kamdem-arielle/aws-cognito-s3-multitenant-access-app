@@ -191,6 +191,26 @@ export class AuthService {
 
   //   return files;
   // }
+  public async validateCredentials(): Promise<void> {
+    if (!this.credentials || this.credentials.expired) {
+      const idToken = this.core.decryptFromLocalStorage('idToken', false)
+
+      if (!idToken) {
+        console.error('No token found. Logging out...');
+        this.logout();
+        throw new Error('No token found.');
+      }
+
+      try {
+
+        await this.configureAWSCredentials(idToken);
+      } catch (err) {
+        console.error('Failed to configure AWS credentials:', err);
+        this.logout();
+        throw err;
+      }
+    }
+  }
 
   async getS3Prefixes(): Promise<string[]> {
     await this.validateCredentials();
