@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import * as CryptoJS from 'crypto-js';
-import { AuthService } from './auth.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class CoreService {
+
+    public clientBucket = '';
+    public bucketMainPrefixes: any = [];
+    public iconCollapse!:boolean;
 
     // For Encryption/Decryption
     public encryptDecryptValuePassword = "PetherSolutions.2020!";
@@ -18,7 +23,7 @@ export class CoreService {
     }
 
     
-  constructor(private auth:AuthService) { }
+  constructor() { }
 
     // test if a string value is null, undefined or empty
     isEmptyOrNull(value: string | null | undefined) {
@@ -95,12 +100,5 @@ export class CoreService {
     localStorage.removeItem(encryptedKey);
   }
 
-  async isUserAuthenticated(){
-    const isLoggedIn = await this.auth.initSession();
-    if (isLoggedIn) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  
 }
