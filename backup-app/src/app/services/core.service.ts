@@ -5,7 +5,12 @@ import * as CryptoJS from 'crypto-js';
 @Injectable({
   providedIn: 'root'
 })
+
 export class CoreService {
+
+    public clientBucket = '';
+    public bucketMainPrefixes: any = [];
+    public iconCollapse!:boolean;
 
     // For Encryption/Decryption
     public encryptDecryptValuePassword = "PetherSolutions.2020!";
