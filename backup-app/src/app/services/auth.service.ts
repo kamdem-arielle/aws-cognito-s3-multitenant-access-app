@@ -192,6 +192,32 @@ export class AuthService {
   //   return files;
   // }
 
+  async getS3Prefixes(): Promise<string[]> {
+    await this.validateCredentials();
+
+    const bucket = this.core.clientBucket;
+    const s3 = new AWS.S3();
+    const params: AWS.S3.ListObjectsV2Request = {
+      Bucket: bucket,
+      Delimiter: '/'
+    };
+
+    try {
+      const data = await s3.listObjectsV2(params).promise();
+
+
+      const prefixes = (data.CommonPrefixes || []).map((prefix) => prefix.Prefix!.slice(0, -1));
+
+
+      this.core.bucketMainPrefixes = prefixes;
+      this.core.encryptToLocalStorage('bucketMainPrefixes', JSON.stringify(prefixes));
+      return prefixes;
+    } catch (err) {
+      console.error('Error listing S3 prefixes:', err);
+      throw err;
+    }
+  }
+
 
   generateSignedUrl(bucket: string, key: string): string {
     const s3 = new AWS.S3();
