@@ -10,6 +10,7 @@ import {
 import { environment } from '../../environments/environment';
 import * as AWS from 'aws-sdk';
 import { CoreService } from './core.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class AuthService {
   private clientPrefix = ''; // Prefix for S3 objects
   private credentials: AWS.CognitoIdentityCredentials | null = null;
 
-  constructor(private core:CoreService) {}
+  constructor(private core:CoreService,private router:Router) {}
 
   async authenticate(username: string, password: string): Promise<AWS.Credentials> {
     const userData = { Username: username, Pool: this.userPool };
@@ -129,6 +130,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('idToken');
     localStorage.removeItem('clientPrefix');
+    this.router.navigate(['/login']);
     AWS.config.credentials = null;
     this.credentials = null;
   }
@@ -158,6 +160,39 @@ export class AuthService {
   }
 
 
+  // async listObjectsInPrefix(prefix: any): Promise<AWS.S3.ObjectList> {
+  //   await this.validateCredentials();
+  //   let bucket = this.core.clientBucket;
+  //   const s3 = new AWS.S3();
+  //   const data = await s3.listObjectsV2({ Bucket: bucket, Prefix: prefix }).promise();
+  //   const files = (data.Contents || [])
+  //     .filter((obj: any) => obj.Key != prefix)
+  //     .map((obj: any) => {
+  //       if (obj.Size > 0) {
+  //         return {
+  //           key: (obj.Key!).replace(prefix, ''),
+  //           url: this.generateSignedUrl(bucket, obj.Key!),
+  //           LastModified: obj.LastModified,
+  //           Size: obj.Size ? obj.Size / 1024 : 0 ,
+  //           type: 'file'
+  //         };
+  //       }else{
+  //         return {
+  //           key: ((obj.Key!).replace(prefix, '')).replace(/\/$/, ''),
+  //           url: obj.Key,
+  //           LastModified: obj.LastModified,
+  //           Size: 0,
+  //           type : 'folder'
+  //         };
+  //       }
+    
+  //     })
+    
+
+  //   return files;
+  // }
+
+
   generateSignedUrl(bucket: string, key: string): string {
     const s3 = new AWS.S3();
     const params = {
@@ -177,5 +212,38 @@ export class AuthService {
       return false;
     }
   }
+
+    // async listObjectsInBucket(): Promise<AWS.S3.ObjectList> {
+  //   let bucket = this.core.clientBucket;
+  //   let bucketObjects: any = [];
+  //   const s3 = new AWS.S3();
+
+  //   const data = await s3.listObjectsV2({ Bucket: bucket, Delimiter: '/' }).promise();
+  //   console.log('S3 prefixes:', data.CommonPrefixes);
+
+  //   const prefixes = data.CommonPrefixes || [];
+
+  //   for (const prefix of prefixes) {
+  //     const prefixData = await s3.listObjectsV2({ Bucket: bucket, Prefix: prefix.Prefix }).promise();
+  //     const files = (prefixData.Contents || [])
+  //       .filter((obj: any) => obj.Size > 0)
+  //       .map(obj => ({
+  //         key: obj.Key!,
+  //         url: this.generateSignedUrl(bucket, obj.Key!),
+  //         LastModified: obj.LastModified,
+  //         Size: obj.Size ? obj.Size / 1024 : 0 // Size in KB
+  //       }));
+
+  //     console.log('Files:', files);
+
+  //     const prefixObjects = { prefix: prefix.Prefix, files: files };
+  //     console.log('Prefix objects:', prefixObjects);
+
+  //     bucketObjects.push(prefixObjects);
+  //   }
+
+  //   return bucketObjects;
+  // }
+
 }
 
