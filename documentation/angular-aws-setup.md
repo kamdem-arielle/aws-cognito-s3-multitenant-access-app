@@ -13,6 +13,7 @@ This project is built using Angular 18 and integrates with AWS services like Ama
  ```bash
   ng new backup-app
  ```
+
    - You can find the Angular project inside the `backup-app` folder.
 
 2. **Main libraries Used**
