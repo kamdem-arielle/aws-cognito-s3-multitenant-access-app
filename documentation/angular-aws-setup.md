@@ -119,6 +119,7 @@ async authenticate(username: string, password: string): Promise<AWS.Credentials>
 
 ```
 
+
 5. **Common errors and fixes**
 
 If you encounter a global error while running your Angular project, it might be due to certain dependencies like amazon-cognito-identity-js using Node globals. To resolve this, add the following line to your polyfills.ts file:
