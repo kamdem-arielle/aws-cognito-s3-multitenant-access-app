@@ -1,0 +1,14 @@
+<main class="main-layout">
+    <div class="alert-container">
+        <!-- <alert></alert> -->
+    </div>
+    <app-header></app-header>
+    <app-sidebar (collapsedEvent)="receiveCollapsed($event)"></app-sidebar>
+    <section class="main-container" [ngClass]="{collapsed: collapedSideBar}">
+        <div class="main-container-wrap">
+            <router-outlet></router-outlet>
+
+        </div>
+    </section>
+    <!-- <app-footer></app-footer> -->
+</main>

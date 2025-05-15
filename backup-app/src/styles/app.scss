@@ -466,3 +466,230 @@ body {
       transform: translateY(0);
     }
   }
+
+  /*OPEN SIDE BAR FOR SIDEBAR*/
+
+.sidebar.openSideBar {
+  width: 250px !important;
+  span,
+  p {
+    display: inline-block !important;
+  }
+  .toggle-button,
+  .nav_sidebar-logout {
+    overflow: hidden;
+  }
+  .logo-min {
+    display: none !important;
+  }
+  .logo-big {
+    display: block !important;
+  }
+  .nav_sidebar-logo {
+    width: auto !important;
+  }
+  .list-group-item {
+    justify-content: flex-start !important;
+  }
+  .nested-menu > li.expand > ul.submenu {
+    padding-left: 2rem !important;
+    display: block !important;
+  }
+  @media screen and (max-width: 991px) {
+    position: fixed !important;
+    z-index: 1100 !important;
+  }
+}
+.sidebar.closeSideBarLargeScreen {
+  .nav_sidebar-logo {
+    margin-right: 13px !important;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .push-right {
+    .sidebar {
+      left: 235px !important;
+    }
+  }
+}
+
+/* MAIN-LAYOUT */
+
+.main-layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+  .main-container {
+    padding: 20px;
+    background-color: #e0ebf3;
+    overflow: auto;
+    &-wrap {
+      padding: 20px;
+      background-color: $c_white;
+      border-radius: 12px;
+    }
+  }
+}
+
+
+/* HEADER-NAV */
+
+.header_nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  grid-gap: 20px;
+  padding: 8px 20px;
+  color: $c_black;
+  background-color: $c_white;
+  box-shadow: 0px 8px 28px 0px rgba($c_black, 0.1);
+  &-lang_toggle {
+    .lang_toggle {
+      &-dropdown {
+        left: 20px !important;
+        right: unset !important;
+      }
+    }
+  }
+  &-logged {
+    font-size: 12px;
+  }
+  &-logo {
+    height: 40px;
+    img {
+      height: 100%;
+    }
+  }
+  &-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+  }
+  &-profile {
+    .profile {
+      &-main {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      &-img {
+        width: 40px;
+        aspect-ratio: 1/1;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+        &.notif_indicator {
+          position: relative;
+          &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 8px;
+            height: 8px;
+            background-color: $c_red;
+            border-radius: 50%;
+            animation: notif-pulser 1s infinite;
+          }
+          @keyframes notif-pulser {
+            0% {
+              transform: scale(1.2);
+            }
+            50% {
+              transform: scale(1);
+            }
+            100% {
+              transform: scale(1.2);
+            }
+          }
+        }
+      }
+      &-name {
+        min-width: 80px;
+        max-width: 140px;
+        font-weight: 600;
+        font-size: 14px;
+        color: $c_black;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      &-position {
+        min-width: 80px;
+        max-width: 140px;
+        font-size: 13px;
+        color: rgba($c_black, 0.5);
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      &-dropdown {
+        left: 0 !important;
+        margin-top: 6px !important;
+        padding: 6px 0;
+        // width: 100%;
+        background-color: $c_white;
+        border: unset !important;
+        border-radius: 8px;
+        box-shadow: 0px 2px 10px 0px rgba($c_black, 0.15);
+        &-item {
+          position: relative;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 20px 6px 12px;
+          font-size: 14px;
+          color: $c_black !important;
+          @media screen and (min-width: 992px) {
+            &:hover {
+              background-color: rgba($c_primary_light, 0.5);
+            }
+          }
+        }
+        &.show {
+          animation: profile-slide 0.5s;
+        }
+      }
+    }
+  }
+  .footer-logged {
+    display: none;
+  }
+  .sp-info,
+  .lang_toggle {
+    display: block;
+  }
+  @keyframes profile-slide {
+    0% {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
+
+// MODAL STYLES DESIGN
+
+.modal-header {
+  padding: 0.7rem;
+  background: #004A87;
+  color: white;
+  justify-content: space-between;
+}
+
+.modal-title{
+  font-size: 19px !important;
+}
+
+.modal-footer {
+  padding: 0.7rem;
+}
+.modal-content{
+  font-family: "Avenir Next" !important;
+}

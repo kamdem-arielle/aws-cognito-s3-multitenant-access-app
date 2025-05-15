@@ -11,6 +11,7 @@ import { environment } from '../../environments/environment';
 import * as AWS from 'aws-sdk';
 import { CoreService } from './core.service';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class AuthService {
   private clientPrefix = ''; // Prefix for S3 objects
   private credentials: AWS.CognitoIdentityCredentials | null = null;
 
-  constructor(private core:CoreService,private router:Router) {}
+  constructor(private core:CoreService,private router:Router,private http: HttpClient) {}
 
   async authenticate(username: string, password: string): Promise<AWS.Credentials> {
     const userData = { Username: username, Pool: this.userPool };
@@ -290,6 +291,135 @@ export class AuthService {
 
   //   return bucketObjects;
   // }
+
+    downloadFile(fileUrl: string) {
+    return new Promise<Blob>((resolve, reject) => {
+      this.http.get(fileUrl, { responseType: 'blob' }).subscribe(
+        (response) => {
+          const blob = new Blob([response], { type: 'application/octet-stream' });
+          resolve(blob)
+        },
+        (error) => {
+          console.error('Error downloading file:', error);
+          reject(error);
+        }
+      )
+    })
+  }
+
+    print(printableArea: any, activeFileType: any, activeFileName: any, activeFileUrl: any) {
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(activeFileType)) {
+      let timer = setTimeout(() => {
+        const printContents = printableArea.nativeElement.innerHTML;
+        const popupWin = window.open(
+          "",
+          "_blank",
+          "width=1000,height=1000,location=no,left=200px"
+        );
+        if (popupWin) {
+          popupWin.document.open();
+          popupWin.document.write(
+            '\
+              <html> \
+                  <head> \
+                      <title></title> \
+                      <link rel="stylesheet" type="text/css" href="../../assets/css/print.css" media="print" /> \
+                  </head> \
+                  <body> \
+                      <div>'
+          );
+        } else {
+          console.error("Failed to open popup window.");
+          return;
+        }
+        popupWin.document.write(printContents);
+        popupWin.document.write(
+          "\
+                    </div> \
+                </body> \
+            </html>"
+        );
+        popupWin.document.close();
+
+        popupWin.addEventListener("load", () => {
+          popupWin.focus();
+          popupWin.print();
+          popupWin.close();
+        });
+        clearTimeout(timer);
+      }, 10);
+    }
+    else if (['mp4', 'webm', 'ogg', 'mov'].includes(activeFileType)) {
+      // Open video info in a printable format
+      const printWindow = window.open('', '_blank');
+      if (printWindow) {
+        printWindow.document.write(`
+            <html>
+              <head>
+                <title>${activeFileName}</title>
+                <style>
+                  body {
+                    font-family: Arial, sans-serif;
+                    padding: 20px;
+                    line-height: 1.6;
+                  }
+                  .video-info {
+                    max-width: 600px;
+                    margin: 0 auto;
+                  }
+                  h1 {
+                    border-bottom: 1px solid #ddd;
+                    padding-bottom: 10px;
+                  }
+                </style>
+              </head>
+              <body>
+                <div class="video-info">
+                  <h1>Video: ${activeFileName}</h1>
+                  <p><strong>File Type:</strong> ${activeFileType.toUpperCase()} video</p>
+                  <p><strong>Location:</strong> <a href="${activeFileUrl}">${activeFileUrl}</a></p>
+                  <p>Note: Video files cannot be directly printed. This information sheet is provided as an alternative.</p>
+                </div>
+                <script>
+                  window.onload = function() {
+                    setTimeout(() => {
+                      window.print();
+                      window.close();
+                    }, 500);
+                  };
+                </script>
+              </body>
+            </html>
+          `);
+        printWindow.document.close();
+      }
+    }
+    // For PDF and other files
+    else {
+      // Create a hidden iframe to load and print the file
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = activeFileUrl;
+
+      iframe.onload = () => {
+        try {
+          iframe.contentWindow?.print();
+        } catch (error) {
+          // If direct print fails, open in new window
+          window.open(activeFileUrl, '_blank')?.print();
+        }
+
+        // Remove the iframe after print dialog is shown
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+        }, 1000);
+      };
+
+      document.body.appendChild(iframe);
+    }
+
+
+  }
 
 }
 
