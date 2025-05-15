@@ -11,6 +11,7 @@ import { environment } from '../../environments/environment';
 import * as AWS from 'aws-sdk';
 import { CoreService } from './core.service';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class AuthService {
   private clientPrefix = ''; // Prefix for S3 objects
   private credentials: AWS.CognitoIdentityCredentials | null = null;
 
-  constructor(private core:CoreService,private router:Router) {}
+  constructor(private core:CoreService,private router:Router,private http: HttpClient) {}
 
   async authenticate(username: string, password: string): Promise<AWS.Credentials> {
     const userData = { Username: username, Pool: this.userPool };
@@ -290,6 +291,21 @@ export class AuthService {
 
   //   return bucketObjects;
   // }
+
+    downloadFile(fileUrl: string) {
+    return new Promise<Blob>((resolve, reject) => {
+      this.http.get(fileUrl, { responseType: 'blob' }).subscribe(
+        (response) => {
+          const blob = new Blob([response], { type: 'application/octet-stream' });
+          resolve(blob)
+        },
+        (error) => {
+          console.error('Error downloading file:', error);
+          reject(error);
+        }
+      )
+    })
+  }
 
     print(printableArea: any, activeFileType: any, activeFileName: any, activeFileUrl: any) {
     if (['jpg', 'jpeg', 'png', 'gif'].includes(activeFileType)) {
