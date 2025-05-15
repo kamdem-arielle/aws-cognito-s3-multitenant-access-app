@@ -673,3 +673,23 @@ body {
     }
   }
 }
+
+// MODAL STYLES DESIGN
+
+.modal-header {
+  padding: 0.7rem;
+  background: #004A87;
+  color: white;
+  justify-content: space-between;
+}
+
+.modal-title{
+  font-size: 19px !important;
+}
+
+.modal-footer {
+  padding: 0.7rem;
+}
+.modal-content{
+  font-family: "Avenir Next" !important;
+}
