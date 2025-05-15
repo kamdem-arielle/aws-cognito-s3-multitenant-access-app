@@ -466,3 +466,50 @@ body {
       transform: translateY(0);
     }
   }
+
+  /*OPEN SIDE BAR FOR SIDEBAR*/
+
+.sidebar.openSideBar {
+  width: 250px !important;
+  span,
+  p {
+    display: inline-block !important;
+  }
+  .toggle-button,
+  .nav_sidebar-logout {
+    overflow: hidden;
+  }
+  .logo-min {
+    display: none !important;
+  }
+  .logo-big {
+    display: block !important;
+  }
+  .nav_sidebar-logo {
+    width: auto !important;
+  }
+  .list-group-item {
+    justify-content: flex-start !important;
+  }
+  .nested-menu > li.expand > ul.submenu {
+    padding-left: 2rem !important;
+    display: block !important;
+  }
+  @media screen and (max-width: 991px) {
+    position: fixed !important;
+    z-index: 1100 !important;
+  }
+}
+.sidebar.closeSideBarLargeScreen {
+  .nav_sidebar-logo {
+    margin-right: 13px !important;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .push-right {
+    .sidebar {
+      left: 235px !important;
+    }
+  }
+}
