@@ -1,1 +1,151 @@
-<p>header works!</p>
+<nav class="navbar" (window:resize)="onResize($event)" >
+
+    <!-- <a class="navbar-brand" href="#">
+      <span class="logo">
+        <img
+          *ngIf="pageMenu == 'sp_menu'"
+          src="assets/images/Limons-Admin-white.png"
+          height="32"
+          style="border-radius: 5px"
+        />
+        <img
+          *ngIf="pageMenu == 'pos_menu'"
+          src="assets/images/Limons.png"
+          height="32"
+          style="border-radius: 5px"
+        />
+      </span>
+      <span class="site-version">{{ core.getSiteVersion() }}</span>
+    </a>
+    &nbsp; -->
+  
+    <div class="navbar-nav sp-info">
+      <!-- <div class="header_nav-logged" *ngIf="loginUser.lastLogin && core.lastConnectionDisplay">{{ 'Last logged in on' | translate }} {{ loginUser?.lastLogin | date: 'medium': core.tzOffset }}</div>
+      <div class="p-2 bd-highlight spLogo">
+        <div
+          class="d-flex"
+          *ngIf="pageMenu == 'sp_menu'"
+          title="{{ 'Service provider logo' | translate }}"
+        >
+          <span *ngIf="core.spLogo">
+            <img
+              _ngcontent-c1=""
+              alt="Service provider Logo"
+              class="logo img-border"
+              [src]="core.spLogo"
+            />
+          </span>
+        </div>
+      </div>
+      <div class="p-2 bd-highlight spName" *ngIf="!core.spLogo">
+        <div class="d-flex" *ngIf="pageMenu == 'pos_menu'">
+          <span class="ml-auto">
+            {{ loginUser.spname }}
+          </span>
+        </div>
+        <div class="d-flex" *ngIf="pageMenu == 'sp_menu'">
+          <span class="ml-auto" *ngIf="core.spInfo">
+            {{ core.spInfo[0][0].name }}
+          </span>
+        </div>
+      </div> -->
+    </div>
+  
+    <div class="">
+      <ul class="navbar-nav ml-auto">
+  
+        <!-- <div class="lang_toggle header_nav-lang_toggle" ngbDropdown>
+          <a href="javascript:void(0)" class="lang_toggle-main" ngbDropdownToggle>
+            <i class="ic ic_lang"></i> 
+            {{ "Language" | translate }}
+            <i class="ic ic_dropdown_arrow"></i> 
+          </a>
+          <div ngbDropdownMenu class="lang_toggle-dropdown">
+            <a ngbDropdownToggle href="javascript:void(0)" (click)="core.changeLang('en')" class="lang-en">
+              {{ "English" | translate }}
+            </a>
+            <a ngbDropdownToggle href="javascript:void(0)" (click)="core.changeLang('fr')" class="lang-fr">
+              {{ "French" | translate }}
+            </a>
+          </div>
+          </div> -->
+        <!-- <li class="nav-item dropdown" ngbDropdown>
+          <a
+            href="javascript:void(0)"
+            *ngIf="pageMenu == 'pos_menu'"
+            class="nav-link"
+            ngbDropdownToggle
+          >
+            <i class="fa fa-user"></i>
+            {{ loginUser.name }}
+            <b class="caret"></b>
+          </a>
+          <a
+            href="javascript:void(0)"
+            *ngIf="pageMenu == 'sp_menu'"
+            class="nav-link"
+            ngbDropdownToggle
+          >
+            <i class="fa fa-user"></i>
+            {{ loginUser.surname }}
+            <b class="caret"></b>
+          </a>
+          <div class="dropdown-menu-right" ngbDropdownMenu>
+            <a class="dropdown-item" href="javascript:void(0)">
+              <i class="fa fa-fw fa-user"></i> {{ "Profile" | translate }}
+            </a>
+            <a class="dropdown-item" href="javascript:void(0)">
+                          <i class="fa fa-fw fa-envelope"></i> {{ 'Inbox' | translate }}
+                      </a>
+                      <a class="dropdown-item" href="javascript:void(0)">
+                          <i class="fa fa-fw fa-gear"></i> {{ 'Settings' | translate }}
+                      </a>
+            <a
+              class="dropdown-item"
+              href="javascript:void(0);"
+              (click)="onLogout()"
+              style="padding: 0px;"
+            >
+              <i class="fa fa-fw fa-power-off"></i> {{ "Log out" | translate }}
+            </a>
+          </div>
+        </li> -->
+        <div class="header_nav-profile" ngbDropdown>
+          <a href="javascript:void(0)" ngbDropdownToggle class="profile-main">
+            <div class="profile-img" >
+              <img #image id="photo4U" [src]="defaultImg4U"/>
+            </div>
+            <div class="profile-info">
+              <div class="profile-name" >{{ 'administrator' }}</div>
+              <div class="profile-position">Account</div>
+            </div>
+          </a>
+          <div class="profile-dropdown" ngbDropdownMenu>
+
+            <!-- <a
+            class="profile-dropdown-item"
+            href="javascript:void(0);"
+        
+
+          >
+          <i class="ic ic_logout"></i> {{ "Profile"}}
+          </a>
+         -->
+            <a
+            class="profile-dropdown-item"
+            href="javascript:void(0);"
+            (click)="auth.logout()"
+
+          >
+          <i class="ic ic_logout"></i> {{ "Log out"}}
+          </a>
+          </div>
+        </div>
+      </ul>
+    </div>
+  
+  </nav>
+  
+  
+
+  
