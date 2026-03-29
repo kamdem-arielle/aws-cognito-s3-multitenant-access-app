@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 
 import {
   CognitoUserPool,
@@ -28,16 +28,67 @@ export class AuthService {
 
   constructor(private core:CoreService,private router:Router,private http: HttpClient) {}
 
-  async authenticate(username: string, password: string): Promise<AWS.Credentials> {
+  // async authenticate(username: string, password: string): Promise<AWS.Credentials> {
+  //   const userData = { Username: username, Pool: this.userPool };
+  //   const authDetails = new AuthenticationDetails({ Username: username, Password: password });
+  //   const cognitoUser = new CognitoUser(userData);
+
+  //   return new Promise((resolve, reject) => {
+  //     cognitoUser.authenticateUser(authDetails, {
+  //       onSuccess: async (result) => {
+  //         const idToken = result.getIdToken().getJwtToken();
+  //         localStorage.setItem('idToken', idToken);
+
+  //         await this.configureAWSCredentials(idToken);
+
+  //         await this.extractClientPrefixFromSession(cognitoUser);
+
+  //         resolve(AWS.config.credentials as AWS.Credentials);
+  //       },
+
+  //       newPasswordRequired: (userAttributes, requiredAttributes) => {
+  //         cognitoUser.completeNewPasswordChallenge(
+  //           environment.challenge, // Replace with actual input
+  //           {},
+  //           {
+  //             onSuccess: async (session) => {
+  //               const idToken = session.getIdToken().getJwtToken();
+  //               localStorage.setItem('idToken', idToken);
+
+  //               await this.configureAWSCredentials(idToken);
+  //               await this.extractClientPrefixFromSession(cognitoUser);
+
+  //               resolve(AWS.config.credentials as AWS.Credentials);
+  //             },
+  //             onFailure: (err) => reject(err)
+  //           }
+  //         );
+  //       },
+
+  //       onFailure: (err) => {
+  //         console.error('Authentication failed:', err);
+  //         reject(err);
+  //       }
+  //     });
+  //   });
+  // }
+
+    async authenticate(username: string, password: string): Promise<AWS.Credentials> {
+    this.userPool = new CognitoUserPool({
+      UserPoolId: environment.userPoolId,
+      ClientId: environment.userPoolWebClientId
+    });
+
     const userData = { Username: username, Pool: this.userPool };
     const authDetails = new AuthenticationDetails({ Username: username, Password: password });
     const cognitoUser = new CognitoUser(userData);
 
     return new Promise((resolve, reject) => {
       cognitoUser.authenticateUser(authDetails, {
-        onSuccess: async (result) => {
+        onSuccess: async (result: CognitoUserSession) => {
           const idToken = result.getIdToken().getJwtToken();
-          localStorage.setItem('idToken', idToken);
+
+          this.core.encryptToLocalStorage('idToken', idToken);
 
           await this.configureAWSCredentials(idToken);
 
@@ -46,26 +97,25 @@ export class AuthService {
           resolve(AWS.config.credentials as AWS.Credentials);
         },
 
-        newPasswordRequired: (userAttributes, requiredAttributes) => {
+        newPasswordRequired: (userAttributes: Record<string, string>, requiredAttributes: string[]) => {
           cognitoUser.completeNewPasswordChallenge(
-            environment.challenge, // Replace with actual input
-            {},
+            environment.challenge,  // Replace with actual user input password
             {
-              onSuccess: async (session) => {
+              onSuccess: async (session: CognitoUserSession) => {
                 const idToken = session.getIdToken().getJwtToken();
-                localStorage.setItem('idToken', idToken);
+                this.core.encryptToLocalStorage('idToken', idToken);
 
                 await this.configureAWSCredentials(idToken);
                 await this.extractClientPrefixFromSession(cognitoUser);
 
                 resolve(AWS.config.credentials as AWS.Credentials);
               },
-              onFailure: (err) => reject(err)
+              onFailure: (err: Error) => reject(err)
             }
           );
         },
 
-        onFailure: (err) => {
+        onFailure: (err: Error) => {
           console.error('Authentication failed:', err);
           reject(err);
         }
@@ -138,27 +188,43 @@ export class AuthService {
 
   listObjectsInPrefix(bucket: string): Promise<AWS.S3.ObjectList> {
     this.clientPrefix = this.clientPrefix ?  this.clientPrefix : this.core.decryptFromLocalStorage('clientPrefix', false);
-    console.log('Client prefix:', this.clientPrefix);
+    let clientPrefix = this.clientPrefix
     const s3 = new AWS.S3();
     return new Promise((resolve, reject) => {
-      s3.listObjectsV2({ Bucket: bucket, Prefix: this.clientPrefix }, (err, data) => {
+      s3.listObjectsV2({ Bucket: bucket, Prefix: this.clientPrefix }, (err: AWS.AWSError, data: AWS.S3.ListObjectsV2Output) => {
         if (err) reject(err);
         else {
           const files = (data.Contents || [])
-            .filter((obj:any) => obj.Size > 0) 
-            .map(obj => ({
-              key: obj.Key!,
-              url: this.generateSignedUrl(bucket, obj.Key!),
-              LastModified : obj.LastModified,
-              Size: obj.Size ? obj.Size / 1024 : 0 // Size in KB
-
-            }));
+            .filter((obj: AWS.S3.Object) => obj.Size && obj.Size > 0) 
+            .map((obj: AWS.S3.Object) => {
+                 if (obj.Size > 0) {
+          return {
+            key: (obj.Key!).replace(clientPrefix, ''),
+            url: this.generateSignedUrl(bucket, obj.Key!),
+            LastModified: obj.LastModified,
+            Size: obj.Size ? (obj.Size / (1024 * 1024)) : 0,
+            type: 'file',
+            name : (obj.Key!).replace(clientPrefix, '')
+          };
+        } else {
+          return {
+            key: ((obj.Key!).replace(clientPrefix, '')).replace(/\/$/, ''),
+            url: obj.Key,
+            LastModified: obj.LastModified,
+            Size: 0,
+            type: 'folder',
+            name : ((obj.Key!).replace(clientPrefix, '')).replace(/\/$/, '')
+          };
+        }
+            });
   
           resolve(files);
         }
       });
     });
   }
+
+
 
 
   // async listObjectsInPrefix(prefix: any): Promise<AWS.S3.ObjectList> {
@@ -192,6 +258,7 @@ export class AuthService {
 
   //   return files;
   // }
+
   public async validateCredentials(): Promise<void> {
     if (!this.credentials || this.credentials.expired) {
       const idToken = this.core.decryptFromLocalStorage('idToken', false)
@@ -227,7 +294,7 @@ export class AuthService {
       const data = await s3.listObjectsV2(params).promise();
 
 
-      const prefixes = (data.CommonPrefixes || []).map((prefix) => prefix.Prefix!.slice(0, -1));
+      const prefixes = (data.CommonPrefixes || []).map((prefix: AWS.S3.CommonPrefix) => prefix.Prefix!.slice(0, -1));
 
 
       this.core.bucketMainPrefixes = prefixes;
@@ -295,11 +362,11 @@ export class AuthService {
     downloadFile(fileUrl: string) {
     return new Promise<Blob>((resolve, reject) => {
       this.http.get(fileUrl, { responseType: 'blob' }).subscribe(
-        (response) => {
+        (response: Blob) => {
           const blob = new Blob([response], { type: 'application/octet-stream' });
           resolve(blob)
         },
-        (error) => {
+        (error: Error) => {
           console.error('Error downloading file:', error);
           reject(error);
         }
@@ -307,7 +374,7 @@ export class AuthService {
     })
   }
 
-    print(printableArea: any, activeFileType: any, activeFileName: any, activeFileUrl: any) {
+    print(printableArea: ElementRef, activeFileType: string, activeFileName: string, activeFileUrl: string) {
     if (['jpg', 'jpeg', 'png', 'gif'].includes(activeFileType)) {
       let timer = setTimeout(() => {
         const printContents = printableArea.nativeElement.innerHTML;
